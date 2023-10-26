@@ -1,25 +1,25 @@
 import { LocalStorage } from "quasar";
 
 const niceColors = [
-  "red-11",
-  "blue-11",
-  "light-green-11",
-  "deep-orange-11",
-  "pink-11",
-  "light-blue-11",
-  "lime-11",
-  "brown-11",
-  "purple-11",
-  "cyan-11",
-  "yellow-11",
-  "grey-11",
-  "deep-purple-11",
-  "teal-11",
-  "amber-11",
-  "blue-grey-11",
-  "indigo-11",
-  "green-11",
-  "orange-11",
+  "red-7",
+  "blue-7",
+  "light-green-7",
+  "deep-orange-7",
+  "pink-7",
+  "light-blue-7",
+  "lime-7",
+  "brown-3",
+  "purple-3",
+  "cyan-7",
+  "yellow-7",
+  "grey-3",
+  "deep-purple-7",
+  "teal-7",
+  "amber-7",
+  "blue-grey-5",
+  "indigo-4",
+  "green-7",
+  "orange-7",
 ];
 
 export const mutations = {
@@ -28,7 +28,10 @@ export const mutations = {
       state.originalText = payload;
       payload = payload.split(state.separator);
     }
-    state.inputSentences = payload.map((s, i) => ({ id: i, text: s }));
+
+    const data = JSON.parse(payload)
+
+    state.inputSentences = data.map((s, i) => ({ id: i, text: s[0], tokens: s[0], spans: s[1]}))
   },
   addClass(state, payload) {
     let existing = state.classes.find((c) => c.name == payload);
@@ -177,8 +180,8 @@ export default {
       inputSentences: [],
       originalText: "",
       separator: "\n",
-      enableKeyboardShortcuts: false,
-      annotationPrecision: "word",
+      enableKeyboardShortcuts: true,
+      annotationPrecision: "token",
       // current state
       currentAnnotation: {},
       currentClass: tags && tags[0] || {},

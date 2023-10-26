@@ -2,6 +2,7 @@
   <div>
     <classes-block />
     <div class="q-pa-lg" style="height:60vh; overflow-y:scroll;">
+      <p>{{this.currentSentence.text}}</p>
       <component
         :is="t.type === 'token' ? 'Token' : 'TokenBlock'"
         :id="'t' + t.start"
@@ -120,7 +121,7 @@ export default {
         this.skipCurrentSentence();
       } else if (event.keyCode == 37) { // left arrow
         this.backOneSentence();
-      } else if (event.keyCode == 82 || event.keyCode == 27) { // r / R or ESC
+      } else if (event.keyCode == 27) { // ESC
         this.resetBlocks();
       }
       // stop event from bubbling up
@@ -138,6 +139,11 @@ export default {
         for (let i = 0; i < this.currentSentence.text.length; i++) {
           spans.push([i, i + 1]);
         }
+      } else if (this.$store.state.annotationPrecision == "token") {  
+        tokens = this.currentSentence.spans.map(span => {
+          return this.currentSentence.tokens.slice(span[0], span[1])
+        })
+        spans = this.currentSentence.spans;
       } else {
         tokens = this.tokenizer.tokenize(this.currentSentence.text);
         spans = this.tokenizer.span_tokenize(this.currentSentence.text);
